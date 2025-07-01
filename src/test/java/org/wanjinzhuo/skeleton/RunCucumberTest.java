@@ -13,6 +13,6 @@ import static io.cucumber.junit.platform.engine.Constants.PLUGIN_PROPERTY_NAME;
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty,html:target/cucumber-reports/report.html")
 @ConfigurationParameter(key = "cucumber.features", value = "src/test/Features")
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "stepDefinitions")
-
+@ConfigurationParameter(key = "cucumber.filter.tags", value = "@Bing")
 public class RunCucumberTest {
 }

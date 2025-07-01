@@ -9,6 +9,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pageObjects.Adminpage;
+import pageObjects.BingSearchPage;
 import pageObjects.LoginPage;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,5 +18,6 @@ public class BaseClass {
     public WebDriver driver;
     public LoginPage lp;
     public Adminpage ap;
+    public BingSearchPage bp;
 
 }

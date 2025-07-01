@@ -14,16 +14,19 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pageObjects.LoginPage;
 import pageObjects.Adminpage;
+import pageObjects.BingSearchPage;
 import utilities.WaitHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Duration;
 import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class Steps extends BaseClass{
 
+    String originalWindow;
     @Before
     public void setUp() {
         Properties prop = new Properties();
@@ -58,12 +61,14 @@ public class Steps extends BaseClass{
 
         lp=new LoginPage(driver);
         ap = new Adminpage(driver);
+        bp=new BingSearchPage(driver);
 
     }
     @When("User opens URL {string}")
     public void user_opens_url(String url) {
         // Write code here that turns the phrase above into concrete actions
         driver.get(url);
+        driver.manage().window().maximize();
     }
     @When("User enters Email {string} and Password {string}")
     public void user_enters_email_and_password(String email, String password) {
@@ -79,10 +84,18 @@ public class Steps extends BaseClass{
     }
     @Then("Page Title should be {string}")
     public void page_title_should_be(String expectedText) {
-        WebElement adminNavheader = ap.getNopCnavheader();
+        //WebElement adminNavheader = ap.getNopCnavheader();
         // 等待页面标题变为预期值
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!windowHandle.equals(originalWindow)) {
+                driver.switchTo().window(windowHandle);
+                break;
+            }
+        }
         WaitHelper wh = new WaitHelper(driver);
-        wh.waitforElement(adminNavheader, 10);
+        //wh.waitforElement(adminNavheader, 10);
         // 获取当前页面标题并打印
         String actualTitle = driver.getTitle();
         //System.out.println("当前页面标题是: " + actualTitle); // 👈 打印页面标题
@@ -107,5 +120,18 @@ public class Steps extends BaseClass{
     public void close_browser() {
         // Write code here that turns the phrase above into concrete actions
         driver.quit();
+    }
+
+    @When("I search for {string}")
+    public void i_search_for(String search) {
+        // Write code here that turns the phrase above into concrete actions
+        bp.setSearch(search);
+        bp.clickSearch();
+    }
+    @When("I click the first search result")
+    public void i_click_the_first_search_result() {
+        // Write code here that turns the phrase above into concrete actions
+        originalWindow = driver.getWindowHandle();
+        bp.clickCucumber();
     }
 }
